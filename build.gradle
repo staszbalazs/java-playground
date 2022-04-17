@@ -17,6 +17,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
 	compileOnly 'org.projectlombok:lombok:1.18.22'
+	compileOnly "org.flywaydb:flyway-core"
 
 	implementation 'org.aspectj:aspectjtools:1.9.9.1'
 
