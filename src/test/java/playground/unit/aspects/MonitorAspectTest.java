@@ -26,9 +26,9 @@ public class MonitorAspectTest {
 
     private static final String INPUT = "Input";
 
-    private static final String START_MESSAGE_METHOD_ANNOTATED_DEBUG = "Started logWithDebugAndMinutes method with args: {text=" + INPUT + "}";
-    private static final String FINISH_MESSAGE_START_METHOD_ANNOTATED_DEBUG = "Finished logWithDebugAndMinutes method in ";
-    private static final String FINISH_MESSAGE_END_METHOD_ANNOTATED_DEBUG = " minutes with return: " + INPUT + " - debug/minutes";
+    private static final String START_MESSAGE_METHOD_ANNOTATED_WARN = "Started logWithWarnAndMinutes method with args: {text=" + INPUT + "}";
+    private static final String FINISH_MESSAGE_START_METHOD_ANNOTATED_WARN = "Finished logWithWarnAndMinutes method in ";
+    private static final String FINISH_MESSAGE_END_METHOD_ANNOTATED_WARN = " minutes with return: " + INPUT + " - warn/minutes";
 
     private static final String START_MESSAGE_METHOD_ANNOTATED_ERROR = "Started logWithErrorAndMillisPrivate method with args: {text=" + INPUT + "}";
     private static final String FINISH_MESSAGE_START_METHOD_ANNOTATED_ERROR = "Finished logWithErrorAndMillisPrivate method in ";
@@ -67,17 +67,17 @@ public class MonitorAspectTest {
     @Test
     public void methodIsAnnotatedWithDebugAndMinutes() {
 
-        methodAnnotatedMonitorTestClass.logWithDebugAndMinutes(INPUT);
+        methodAnnotatedMonitorTestClass.logWithWarnAndMinutes(INPUT);
 
         List<ILoggingEvent> logsList = listAppender.list;
         assertEquals(2, logsList.size());
 
-        assertEquals(START_MESSAGE_METHOD_ANNOTATED_DEBUG, logsList.get(0).getMessage());
-        assertEquals(Level.DEBUG, logsList.get(0).getLevel());
+        assertEquals(START_MESSAGE_METHOD_ANNOTATED_WARN, logsList.get(0).getMessage());
+        assertEquals(Level.WARN, logsList.get(0).getLevel());
 
-        assertTrue(logsList.get(1).getMessage().startsWith(FINISH_MESSAGE_START_METHOD_ANNOTATED_DEBUG));
-        assertTrue(logsList.get(1).getMessage().endsWith(FINISH_MESSAGE_END_METHOD_ANNOTATED_DEBUG));
-        assertEquals(Level.DEBUG, logsList.get(1).getLevel());
+        assertTrue(logsList.get(1).getMessage().startsWith(FINISH_MESSAGE_START_METHOD_ANNOTATED_WARN));
+        assertTrue(logsList.get(1).getMessage().endsWith(FINISH_MESSAGE_END_METHOD_ANNOTATED_WARN));
+        assertEquals(Level.WARN, logsList.get(1).getLevel());
 
     }
 
@@ -130,9 +130,9 @@ public class MonitorAspectTest {
 
     private static class MethodAnnotatedMonitorTestClass {
 
-        @Monitor(logLevel = LogLevel.DEBUG, unit = ChronoUnit.MINUTES, showArgs = true, showResult = true, showExecutionTime = true)
-        public String logWithDebugAndMinutes(String text) {
-            return text + " - debug/minutes";
+        @Monitor(logLevel = LogLevel.WARN, unit = ChronoUnit.MINUTES, showArgs = true, showResult = true, showExecutionTime = true)
+        public String logWithWarnAndMinutes(String text) {
+            return text + " - warn/minutes";
         }
 
         public String callLogWithErrorAndMillisPrivate(String text) {
