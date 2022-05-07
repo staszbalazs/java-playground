@@ -9,7 +9,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.logging.LogLevel;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.time.Instant;
@@ -19,22 +18,27 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-@Component
 @Aspect
 public class MonitorAspect {
 
     @Pointcut("within(@playground.aspects.Monitor *)")
-    public void beanAnnotatedWithMonitor() {}
+    public void classAnnotatedWithMonitor() {}
 
     @Pointcut("execution(public * *(..))")
     public void publicMethod() {}
 
-    @Around("publicMethod() && beanAnnotatedWithMonitor()")
+    @Pointcut("@annotation(playground.aspects.Monitor)")
+    public void annotatedWithMonitor() {}
+
+    @Pointcut("execution(* *(..))")
+    public void method() {}
+
+    @Around("publicMethod() && classAnnotatedWithMonitor()")
     public Object logClassAnnotated(ProceedingJoinPoint point) throws Throwable {
         return log(point);
     }
 
-    @Around("@annotation(playground.aspects.Monitor)")
+    @Around("method() && annotatedWithMonitor()")
     public Object logDirectlyAnnotated(ProceedingJoinPoint point) throws Throwable {
         return log(point);
     }
