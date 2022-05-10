@@ -32,6 +32,8 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	testRuntimeOnly 'com.h2database:h2:2.1.212'
+
 	testAspect sourceSets.main.output
 }
 
