@@ -7,19 +7,22 @@ COPY gradle ./gradle/
 
 #gradlew uses the xargs command, not in openjdk-17 by default
 RUN microdnf install findutils
+
+RUN chmod +x gradlew
 RUN ./gradlew dependencies -i --stacktrace
 
 #Build the project
 FROM cache as build
 
 COPY . .
+RUN chmod +x gradlew
 RUN ./gradlew build --no-daemon -i --stacktrace
 
 #Create the final version
 FROM openjdk:17 as final
 WORKDIR /usr/app/
 
-COPY --from=build /usr/app/build/libs/*.jar .
+COPY --from=build /usr/app/build/libs/*.jar ./
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "spring-boot-application.jar"]
